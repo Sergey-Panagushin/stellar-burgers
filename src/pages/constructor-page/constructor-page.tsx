@@ -1,4 +1,7 @@
-import { useSelector } from '../../services/store';
+import { useSelector, useDispatch } from '../../services/store';
+import { addIngredient } from '../../services/slices/burgerConstructorSlice';
+import { getIngredientsLoading } from '../../services/selectors/ingredientsSelectors';
+import { TIngredient } from '@utils-types';
 
 import styles from './constructor-page.module.css';
 
@@ -8,8 +11,12 @@ import { Preloader } from '../../components/ui';
 import { FC } from 'react';
 
 export const ConstructorPage: FC = () => {
-  /** TODO: взять переменную из стора */
-  const isIngredientsLoading = false;
+  const dispatch = useDispatch();
+  const isIngredientsLoading = useSelector(getIngredientsLoading);
+
+  const handleAddIngredient = (ingredient: TIngredient) => {
+    dispatch(addIngredient(ingredient));
+  };
 
   return (
     <>
@@ -23,7 +30,7 @@ export const ConstructorPage: FC = () => {
             Соберите бургер
           </h1>
           <div className={`${styles.main} pl-5 pr-5`}>
-            <BurgerIngredients />
+            <BurgerIngredients onAddIngredient={handleAddIngredient} />
             <BurgerConstructor />
           </div>
         </main>

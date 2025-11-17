@@ -1,30 +1,34 @@
 import { forwardRef, useMemo } from 'react';
+import { useSelector } from '../../services/store';
 import { TIngredientsCategoryProps } from './type';
 import { TIngredient } from '@utils-types';
 import { IngredientsCategoryUI } from '../ui/ingredients-category';
+import { getConstructorItems } from '../../services/selectors/constructorSelectors';
 
 export const IngredientsCategory = forwardRef<
   HTMLUListElement,
   TIngredientsCategoryProps
->(({ title, titleRef, ingredients }, ref) => {
-  /** TODO: взять переменную из стора */
-  const burgerConstructor = {
-    bun: {
-      _id: ''
-    },
-    ingredients: []
-  };
+>(({ title, titleRef, ingredients, onAddIngredient }, ref) => {
+  const constructorItems = useSelector(getConstructorItems);
 
   const ingredientsCounters = useMemo(() => {
-    const { bun, ingredients } = burgerConstructor;
+    const { bun, ingredients: constructorIngredients = [] } = constructorItems;
+
     const counters: { [key: string]: number } = {};
-    ingredients.forEach((ingredient: TIngredient) => {
-      if (!counters[ingredient._id]) counters[ingredient._id] = 0;
-      counters[ingredient._id]++;
+
+    constructorIngredients.forEach((ingredient: TIngredient) => {
+      if (ingredient && ingredient._id) {
+        if (!counters[ingredient._id]) counters[ingredient._id] = 0;
+        counters[ingredient._id]++;
+      }
     });
-    if (bun) counters[bun._id] = 2;
+
+    if (bun && bun._id) {
+      counters[bun._id] = 2;
+    }
+
     return counters;
-  }, [burgerConstructor]);
+  }, [constructorItems]);
 
   return (
     <IngredientsCategoryUI
@@ -33,6 +37,7 @@ export const IngredientsCategory = forwardRef<
       ingredients={ingredients}
       ingredientsCounters={ingredientsCounters}
       ref={ref}
+      onAddIngredient={onAddIngredient}
     />
   );
 });
