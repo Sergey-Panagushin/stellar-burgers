@@ -44,7 +44,6 @@ export const BurgerConstructor: FC = () => {
 
   const handleCloseOrderModal = () => {
     dispatch(closeOrderModal());
-    dispatch(clearConstructor());
   };
 
   return (

@@ -7,13 +7,14 @@ import {
 } from '../../services/slices/orderSlice';
 import { Preloader } from '../ui/preloader';
 import { OrderInfo } from '../order-info';
+import { RootState } from '../../services/store';
 
 export const OrderDetails: FC = () => {
   const { number } = useParams<{ number: string }>();
   const dispatch = useDispatch();
 
   const { currentOrder, currentOrderLoading, currentOrderError } = useSelector(
-    (state: any) => state.order
+    (state: RootState) => state.order
   );
 
   useEffect(() => {

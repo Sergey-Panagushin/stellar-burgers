@@ -9,7 +9,7 @@ import {
 import { TUser, TRegisterData, TLoginData } from '../../utils/types';
 import { setCookie, deleteCookie, getCookie } from '../../utils/cookie';
 
-const handleApiError = (error: any): string => {
+const handleApiError = (error: unknown): string => {
   if (error instanceof Error) {
     return translateErrorMessage(error.message);
   }
@@ -18,7 +18,7 @@ const handleApiError = (error: any): string => {
     return translateErrorMessage(error);
   }
 
-  if (error && typeof error === 'object' && error.message) {
+  if (error && typeof error === 'object' && 'message' in error) {
     return translateErrorMessage(String(error.message));
   }
 
@@ -64,7 +64,8 @@ const translateErrorMessage = (message: string): string => {
 
   if (
     lowerMessage.includes('jwt expired') ||
-    lowerMessage.includes('token is invalid')
+    lowerMessage.includes('token is invalid') ||
+    lowerMessage.includes('jwt malformed')
   ) {
     return '';
   }
@@ -129,10 +130,12 @@ export const getUser = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   'user/updateUser',
-  async (data: Partial<TRegisterData>, { rejectWithValue }) => {
+  async (data: Partial<TRegisterData>, { rejectWithValue, dispatch }) => {
     try {
       const token = getCookie('accessToken');
       if (!token) {
+        deleteCookie('accessToken');
+        localStorage.removeItem('refreshToken');
         throw new Error('Токен не найден. Пожалуйста, войдите снова.');
       }
 
@@ -140,6 +143,17 @@ export const updateUser = createAsyncThunk(
       return response.user;
     } catch (error) {
       const errorMessage = handleApiError(error);
+
+      if (
+        errorMessage &&
+        (errorMessage.includes('authorised') ||
+          errorMessage.includes('authorized') ||
+          errorMessage.includes('token'))
+      ) {
+        deleteCookie('accessToken');
+        localStorage.removeItem('refreshToken');
+      }
+
       return rejectWithValue(errorMessage);
     }
   }
@@ -183,6 +197,10 @@ const userSlice = createSlice({
     },
     setAuthChecked: (state, action: PayloadAction<boolean>) => {
       state.isAuthChecked = action.payload;
+    },
+    clearUser: (state) => {
+      state.user = null;
+      state.isAuthChecked = true;
     }
   },
   extraReducers: (builder) => {
@@ -257,8 +275,7 @@ const userSlice = createSlice({
             errorMessage.includes('token'))
         ) {
           state.user = null;
-          deleteCookie('accessToken');
-          localStorage.removeItem('refreshToken');
+          state.isAuthChecked = true;
         }
       })
 

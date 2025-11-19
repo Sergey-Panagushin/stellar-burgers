@@ -3,11 +3,20 @@ import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
 import { useSelector } from '../../services/store';
+import { RootState } from '../../services/store';
+
+interface IIngredientWithCount extends TIngredient {
+  count: number;
+}
+
+interface IIngredientsInfo {
+  [key: string]: IIngredientWithCount;
+}
 
 export const OrderInfo: FC = () => {
-  const orderData = useSelector((state: any) => state.order.currentOrder);
+  const orderData = useSelector((state: RootState) => state.order.currentOrder);
   const ingredients: TIngredient[] = useSelector(
-    (state: any) => state.ingredients.ingredients
+    (state: RootState) => state.ingredients.ingredients
   );
 
   const orderInfo = useMemo(() => {
@@ -15,7 +24,7 @@ export const OrderInfo: FC = () => {
 
     const date = new Date(orderData.createdAt);
 
-    const ingredientsInfo: { [key: string]: any } = {};
+    const ingredientsInfo: IIngredientsInfo = {};
 
     orderData.ingredients.forEach((item: string) => {
       if (!ingredientsInfo[item]) {
@@ -32,7 +41,8 @@ export const OrderInfo: FC = () => {
     });
 
     const total = Object.values(ingredientsInfo).reduce(
-      (acc: number, item: any) => acc + item.price * item.count,
+      (acc: number, item: IIngredientWithCount) =>
+        acc + item.price * item.count,
       0
     );
 

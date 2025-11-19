@@ -8,14 +8,16 @@ import {
   getFeedOrders,
   getFeedLoading
 } from '../../services/selectors/feedSelectors';
+import { RootState } from '../../services/store';
 
 export const Feed: FC = () => {
   const dispatch = useDispatch();
 
   const orders = useSelector(getFeedOrders);
   const loading = useSelector(getFeedLoading);
+
   const ingredients = useSelector(
-    (state: any) => state.ingredients.ingredients
+    (state: RootState) => state.ingredients.ingredients
   );
 
   useEffect(() => {

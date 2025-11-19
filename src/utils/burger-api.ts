@@ -32,7 +32,8 @@ export const fetchWithRefresh = async <T>(
 ) => {
   try {
     const token = getCookie('accessToken');
-    if (token && !(options.headers as any)?.authorization) {
+
+    if (token && !(options.headers as Record<string, string>)?.authorization) {
       options.headers = {
         ...options.headers,
         authorization: `Bearer ${token}`
@@ -41,10 +42,12 @@ export const fetchWithRefresh = async <T>(
 
     const res = await fetch(url, options);
     return await checkResponse<T>(res);
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const error = err as { message?: string };
+
     if (
-      err?.message === 'jwt expired' ||
-      err?.message === 'You should be authorised'
+      error?.message === 'jwt expired' ||
+      error?.message === 'You should be authorised'
     ) {
       try {
         const refreshData = await refreshToken();
@@ -66,7 +69,7 @@ export const fetchWithRefresh = async <T>(
         throw new Error('Сессия истекла. Пожалуйста, войдите снова.');
       }
     } else {
-      throw new Error(err?.message || 'Ошибка запроса');
+      throw new Error(error?.message || 'Ошибка запроса');
     }
   }
 };

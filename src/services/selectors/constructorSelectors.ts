@@ -1,10 +1,17 @@
 import { RootState } from '../store';
 import { TIngredient } from '../../utils/types';
+import { createSelector } from '@reduxjs/toolkit';
 
-export const getConstructorItems = (state: RootState) => ({
-  bun: state.burgerConstructor?.bun || null,
-  ingredients: state.burgerConstructor?.ingredients || []
-});
+export const getConstructorItems = createSelector(
+  [
+    (state: RootState) => state.burgerConstructor?.bun,
+    (state: RootState) => state.burgerConstructor?.ingredients
+  ],
+  (bun, ingredients) => ({
+    bun: bun || null,
+    ingredients: ingredients || []
+  })
+);
 
 export const getConstructorBun = (state: RootState) =>
   state.burgerConstructor?.bun || null;
