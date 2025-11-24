@@ -5,7 +5,6 @@
 }
 
 .titleBox {
-  max-width: 46%;
   display: flex;
   align-items: center;
   justify-content: space-between;
