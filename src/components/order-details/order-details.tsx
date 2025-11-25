@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from '../../services/store';
 import {
   getOrderByNumber,
   clearCurrentOrder
-} from '../../services/slices/orderSlice';
+} from '../../services/slices/orderSlice/orderSlice';
 import { Preloader } from '../ui/preloader';
 import { OrderInfo } from '../order-info';
 import { RootState } from '../../services/store';

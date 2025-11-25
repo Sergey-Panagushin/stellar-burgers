@@ -2,7 +2,10 @@ import { FC, SyntheticEvent, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
 import { useNavigate } from 'react-router-dom';
 import { RegisterUI } from '@ui-pages';
-import { registerUser, clearError } from '../../services/slices/userSlice';
+import {
+  registerUser,
+  clearError
+} from '../../services/slices/userSlice/userSlice';
 import {
   getUserError,
   getIsAuthenticated

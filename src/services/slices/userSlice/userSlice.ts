@@ -5,9 +5,9 @@ import {
   getUserApi,
   logoutApi,
   updateUserApi
-} from '../../utils/burger-api';
-import { TUser, TRegisterData, TLoginData } from '../../utils/types';
-import { setCookie, deleteCookie, getCookie } from '../../utils/cookie';
+} from '../../../utils/burger-api';
+import { TUser, TRegisterData, TLoginData } from '../../../utils/types';
+import { setCookie, deleteCookie, getCookie } from '../../../utils/cookie';
 
 const handleApiError = (error: unknown): string => {
   if (error instanceof Error) {
