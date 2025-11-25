@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from '../../services/store';
-import { addIngredient } from '../../services/slices/burgerConstructorSlice';
+import { addIngredient } from '../../services/slices/burgerConstructorSlice/burgerConstructorSlice';
 import { getIngredientsLoading } from '../../services/selectors/ingredientsSelectors';
 import { TIngredient } from '@utils-types';
 

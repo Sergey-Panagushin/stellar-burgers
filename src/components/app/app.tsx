@@ -25,7 +25,7 @@ import { AppHeader } from '@components';
 import { Provider } from 'react-redux';
 import { ProtectedRoute } from '../protected-route/protected-route';
 import { useEffect } from 'react';
-import { getUser } from '../../services/slices/userSlice';
+import { getUser } from '../../services/slices/userSlice/userSlice';
 import { getIsAuthChecked } from '../../services/selectors/userSelectors';
 
 const AppContent: React.FC = () => {
