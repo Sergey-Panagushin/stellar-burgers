@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import { userReducer, loginUser, clearError } from './userSlice';
+import { userReducer, loginUser, clearError, initialState } from './userSlice';
 import { TUser } from '@utils-types';
 
 const mockUser: TUser = {
@@ -8,13 +8,6 @@ const mockUser: TUser = {
 };
 
 describe('user reducer', () => {
-  const initialState = {
-    user: null,
-    isAuthChecked: false,
-    loading: false,
-    error: null
-  };
-
   test('должен возвращать начальное состояние', () => {
     const result = userReducer(undefined, { type: 'UNKNOWN' });
     expect(result).toEqual(initialState);

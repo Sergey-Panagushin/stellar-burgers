@@ -2,7 +2,8 @@ import { describe, expect, test } from '@jest/globals';
 import {
   ingredientsReducer,
   fetchIngredients,
-  clearError
+  clearError,
+  initialState
 } from './ingredientsSlice';
 import { TIngredient } from '@utils-types';
 
@@ -36,12 +37,6 @@ const mockIngredients: TIngredient[] = [
 ];
 
 describe('ingredients reducer', () => {
-  const initialState = {
-    ingredients: [] as TIngredient[],
-    loading: false,
-    error: null as string | null
-  };
-
   describe('начальное состояние', () => {
     test('должен возвращать начальное состояние при неизвестном экшене', () => {
       const result = ingredientsReducer(undefined, { type: 'UNKNOWN_ACTION' });

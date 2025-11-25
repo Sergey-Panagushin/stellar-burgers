@@ -1,5 +1,10 @@
 import { describe, expect, test, jest } from '@jest/globals';
-import { ordersReducer, clearOrdersError, getOrders } from './ordersSlice';
+import {
+  ordersReducer,
+  clearOrdersError,
+  getOrders,
+  initialState
+} from './ordersSlice';
 import { TOrder, TOrdersData } from '../../../utils/types';
 
 jest.mock('../../../utils/burger-api', () => ({
@@ -38,19 +43,14 @@ describe('ordersSlice тесты', () => {
     test('возвращает initialState', () => {
       const state = ordersReducer(undefined, { type: 'UNKNOWN_ACTION' });
 
-      expect(state).toEqual({
-        orders: [],
-        loading: false,
-        error: null
-      });
+      expect(state).toEqual(initialState);
     });
   });
 
   describe('clearOrdersError', () => {
     test('очищает ошибку', () => {
       const state = {
-        orders: [],
-        loading: false,
+        ...initialState,
         error: 'Ошибка'
       };
 
@@ -61,8 +61,7 @@ describe('ordersSlice тесты', () => {
 
     test('не меняет state если ошибки нет', () => {
       const state = {
-        orders: mockOrders,
-        loading: false,
+        ...initialState,
         error: null
       };
 
@@ -75,8 +74,7 @@ describe('ordersSlice тесты', () => {
   describe('getOrders', () => {
     test('loading true при начале загрузки', () => {
       const state = {
-        orders: [],
-        loading: false,
+        ...initialState,
         error: null
       };
 
@@ -89,8 +87,7 @@ describe('ordersSlice тесты', () => {
 
     test('loading false и orders обновляются при успехе', () => {
       const state = {
-        orders: [],
-        loading: true,
+        ...initialState,
         error: null
       };
 
@@ -104,8 +101,7 @@ describe('ordersSlice тесты', () => {
     });
     test('loading false и error при ошибке', () => {
       const state = {
-        orders: [],
-        loading: true,
+        ...initialState,
         error: null
       };
 
@@ -120,8 +116,7 @@ describe('ordersSlice тесты', () => {
 
     test('стандартная ошибка если message нет', () => {
       const state = {
-        orders: [],
-        loading: true,
+        ...initialState,
         error: null
       };
 

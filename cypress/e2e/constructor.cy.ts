@@ -1,4 +1,9 @@
 describe('Конструктор бургеров', () => {
+  const BUN_NAME = 'Краторная булка N-200i';
+  const FILLING_NAME = 'Филе Люминесцентного тетраодонтимформа';
+  const ORDER_BUTTON = 'Оформить заказ';
+  const FILLINGS_TAB = 'Начинки';
+
   beforeEach(() => {
     cy.intercept('GET', 'api/ingredients', {
       fixture: 'ingredients.json'
@@ -29,47 +34,55 @@ describe('Конструктор бургеров', () => {
 
   describe('Добавление ингредиентов', () => {
     it('добавляет булку', () => {
-      cy.contains('Краторная булка N-200i')
+      cy.contains(BUN_NAME)
         .parent()
         .find('button')
         .contains('Добавить')
         .click({ force: true });
 
-      cy.contains('(верх)').should('exist');
-      cy.contains('(низ)').should('exist');
+      cy.contains(`${BUN_NAME} (верх)`).should('exist');
+      cy.contains(`${BUN_NAME} (низ)`).should('exist');
     });
 
     it('добавляет начинку', () => {
-      cy.contains('Краторная булка N-200i')
+      cy.contains(BUN_NAME)
         .parent()
         .find('button')
         .contains('Добавить')
         .click({ force: true });
 
-      cy.contains('Начинки').click({ force: true });
-      cy.contains('Филе Люминесцентного тетраодонтимформа')
+      cy.contains(FILLINGS_TAB).click({ force: true });
+      cy.contains(FILLING_NAME)
         .parent()
         .find('button')
         .contains('Добавить')
         .click({ force: true });
 
-      cy.contains('Выберите начинку').should('not.exist');
+      cy.contains(FILLING_NAME).should('exist');
     });
   });
 
   describe('Модальное окно', () => {
-    it('открывается при клике', () => {
-      cy.contains('Краторная булка N-200i').click({ force: true });
+    it('открывается при клике и показывает правильный ингредиент', () => {
+      cy.contains(BUN_NAME).click({ force: true });
       cy.url().should('include', '/ingredients/');
+      
+      cy.contains(BUN_NAME).should('exist');
+      cy.contains('Калории, ккал').should('exist');
+      cy.contains('420').should('exist');
     });
 
-    it('показывает данные', () => {
-      cy.contains('Краторная булка N-200i').click({ force: true });
+    it('показывает данные другого ингредиента', () => {
+      cy.contains(FILLINGS_TAB).click({ force: true });
+      cy.contains(FILLING_NAME).click({ force: true });
+      
+      cy.contains(FILLING_NAME).should('exist');
       cy.contains('Калории, ккал').should('exist');
+      cy.contains('643').should('exist');
     });
 
     it('закрывается', () => {
-      cy.contains('Краторная булка N-200i').click({ force: true });
+      cy.contains(BUN_NAME).click({ force: true });
       cy.go('back');
       cy.url().should('eq', 'http://localhost:4000/');
     });
@@ -82,20 +95,20 @@ describe('Конструктор бургеров', () => {
     });
 
     it('создает заказ', () => {
-      cy.contains('Краторная булка N-200i')
+      cy.contains(BUN_NAME)
         .parent()
         .find('button')
         .contains('Добавить')
         .click({ force: true });
 
-      cy.contains('Начинки').click({ force: true });
-      cy.contains('Филе Люминесцентного тетраодонтимформа')
+      cy.contains(FILLINGS_TAB).click({ force: true });
+      cy.contains(FILLING_NAME)
         .parent()
         .find('button')
         .contains('Добавить')
         .click({ force: true });
 
-      cy.get('button').contains('Оформить заказ').click({ force: true });
+      cy.contains('button', ORDER_BUTTON).click({ force: true });
 
       cy.contains('12345').should('exist');
     });

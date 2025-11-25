@@ -5,7 +5,8 @@ import {
   moveIngredientUp,
   moveIngredientDown,
   removeIngredient,
-  clearConstructor
+  clearConstructor,
+  initialState
 } from './burgerConstructorSlice';
 import { createOrder } from '../orderSlice/orderSlice';
 import { TIngredient } from '@utils-types';
@@ -53,11 +54,6 @@ const mockFilling2: TIngredient = {
 };
 
 describe('burgerConstructor reducer', () => {
-  const initialState = {
-    bun: null as TIngredient | null,
-    ingredients: [] as TIngredient[]
-  };
-
   describe('начальное состояние', () => {
     test('должен возвращать начальное состояние при неизвестном экшене', () => {
       const result = burgerConstructorReducer(undefined, {

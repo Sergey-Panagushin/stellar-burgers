@@ -4,7 +4,8 @@ import {
   addIngredient,
   removeIngredient,
   moveIngredient,
-  clearConstructor
+  clearConstructor,
+  initialState
 } from './constructorSlice';
 import { TIngredient, TConstructorIngredient } from '@utils-types';
 
@@ -51,11 +52,6 @@ const mockFilling2: TIngredient = {
 };
 
 describe('constructor reducer', () => {
-  const initialState = {
-    bun: null as TIngredient | null,
-    ingredients: [] as TConstructorIngredient[]
-  };
-
   describe('начальное состояние', () => {
     test('должен возвращать начальное состояние при неизвестном экшене', () => {
       const result = constructorReducer(undefined, { type: 'UNKNOWN_ACTION' });

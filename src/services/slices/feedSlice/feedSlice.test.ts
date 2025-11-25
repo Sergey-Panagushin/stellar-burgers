@@ -1,15 +1,12 @@
 import { describe, expect, test } from '@jest/globals';
-import { feedReducer, getFeeds, clearFeedError } from './feedSlice';
+import {
+  feedReducer,
+  getFeeds,
+  clearFeedError,
+  initialState
+} from './feedSlice';
 
 describe('feed reducer', () => {
-  const initialState = {
-    orders: [],
-    total: 0,
-    totalToday: 0,
-    loading: false,
-    error: null
-  };
-
   test('должен возвращать начальное состояние', () => {
     const result = feedReducer(undefined, { type: 'UNKNOWN' });
     expect(result).toEqual(initialState);

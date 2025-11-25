@@ -1,5 +1,10 @@
 import { describe, expect, test } from '@jest/globals';
-import { orderReducer, createOrder, clearOrder } from './orderSlice';
+import {
+  orderReducer,
+  createOrder,
+  clearOrder,
+  initialState
+} from './orderSlice';
 import { TOrder } from '@utils-types';
 
 const mockOrder: TOrder = {
@@ -13,16 +18,6 @@ const mockOrder: TOrder = {
 };
 
 describe('order reducer', () => {
-  const initialState = {
-    order: null,
-    orderRequest: false,
-    orderModalData: null,
-    error: null,
-    currentOrder: null,
-    currentOrderLoading: false,
-    currentOrderError: null
-  };
-
   test('должен возвращать начальное состояние', () => {
     const result = orderReducer(undefined, { type: 'UNKNOWN' });
     expect(result).toEqual(initialState);
